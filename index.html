@@ -216,7 +216,7 @@
           const div = document.createElement('div');
           div.className = 'relative group';
           div.innerHTML = `<img src="${img}" onclick="window.open('${img}', '_blank')">
-            <a href="${img}" download="image_${i+1}.jpg" class="absolute bottom-1 right-1 bg-black/60 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition">下载</a>`;
+            <a href="${BASE}/api/douyin?dl=${encodeURIComponent(img)}&filename=image_${i+1}.jpg" class="absolute bottom-1 right-1 bg-black/60 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition">下载</a>`;
           gallery.appendChild(div);
         });
       }
@@ -230,8 +230,8 @@
           div.className = 'rounded-xl overflow-hidden';
           div.innerHTML = `<img src="${lp.image}" class="w-full h-48 object-cover">
             <div class="p-2 bg-gray-50 flex gap-2">
-              <a href="${lp.image}" download="live_${i+1}_photo.jpg" class="flex-1 text-center bg-white border text-xs py-1.5 rounded-lg">下载照片</a>
-              <a href="${lp.video}" download="live_${i+1}_video.mp4" class="flex-1 text-center bg-indigo-500 text-white text-xs py-1.5 rounded-lg">下载视频</a>
+              <a href="${BASE}/api/douyin?dl=${encodeURIComponent(lp.image)}&filename=live_${i+1}_photo.jpg" class="flex-1 text-center bg-white border text-xs py-1.5 rounded-lg">下载照片</a>
+              <a href="${BASE}/api/douyin?dl=${encodeURIComponent(lp.video)}&filename=live_${i+1}_video.mp4" class="flex-1 text-center bg-indigo-500 text-white text-xs py-1.5 rounded-lg">下载视频</a>
             </div>`;
           liveSection.appendChild(div);
         });
@@ -241,15 +241,14 @@
       dlSection.innerHTML = '';
       if (data.type === 'video' && data.url) {
         const title = (data.title || 'video').replace(/[^\w一-龥]/g, '_').slice(0, 30);
-        const safeTitle = title.replace(/'/g, "\\'");
         dlSection.innerHTML = `
           <div class="flex gap-2">
-            <button onclick="downloadFile('${data.url}', '${safeTitle}.mp4')" class="flex-1 text-center bg-indigo-500 hover:bg-indigo-600 text-white font-medium py-2.5 rounded-xl text-sm transition link-btn">下载视频</button>
+            <a href="${BASE}/api/douyin?dl=${encodeURIComponent(data.url)}&filename=${encodeURIComponent(title + '.mp4')}" class="flex-1 text-center bg-indigo-500 hover:bg-indigo-600 text-white font-medium py-2.5 rounded-xl text-sm transition link-btn">下载视频</a>
             <button onclick="copyText('${data.url}')" class="px-5 py-2.5 border border-gray-200 hover:bg-gray-50 rounded-xl text-sm transition">复制链接</button>
           </div>`;
         if (data.video_backup?.length) {
           dlSection.innerHTML += data.video_backup.map((u, i) =>
-            `<button onclick="downloadFile('${u}', '${safeTitle}_${i+1}.mp4')" class="block text-center text-xs text-gray-400 hover:text-indigo-500 mt-1">备用线路${i+1}下载</button>`
+            `<a href="${BASE}/api/douyin?dl=${encodeURIComponent(u)}&filename=${encodeURIComponent(title + '_' + (i+1) + '.mp4')}" class="block text-center text-xs text-gray-400 hover:text-indigo-500 mt-1">备用线路${i+1}下载</a>`
           ).join('');
         }
       }
@@ -276,6 +275,6 @@
       }, 50);
     });
   </script>
-  <div class="text-center text-xs text-gray-300 mt-8 mb-4">v1.3 - JS下载修复</div>
+  <div class="text-center text-xs text-gray-300 mt-8 mb-4">v1.4 - Worker代理下载</div>
 </body>
 </html>
