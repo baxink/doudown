@@ -26,8 +26,9 @@
     @keyframes spin { to { transform: rotate(360deg); } }
   </style>
 </head>
-<body class="bg-gray-100 min-h-screen flex items-center justify-center p-4">
-  <div class="w-full max-w-2xl">
+<body class="bg-gray-100 min-h-screen flex flex-col">
+  <div class="flex-1 flex items-center justify-center p-4">
+    <div class="w-full max-w-2xl">
     <div class="text-center mb-8">
       <h1 class="text-3xl font-bold text-gray-800">去水印下载</h1>
       <p class="text-gray-500 mt-2 text-sm">支持抖音、小红书视频/图集解析</p>
@@ -280,9 +281,10 @@
       }, 50);
     });
   </script>
-  <div class="text-center text-xs text-gray-400 mt-8 mb-4 space-y-1">
-    <div>v1.6 - 图片代理预览+下载</div>
-    <div class="text-gray-300">更新：修复小红书图片预览、添加常驻下载按钮、Worker区分预览与下载</div>
+  </div>
+  <div class="text-center text-xs text-gray-400 py-4 space-y-1">
+    <div>v1.7 - 响应式布局修复</div>
+    <div class="text-gray-300">更新：自适应手机/电脑端、版本号固定底部、优化布局</div>
   </div>
 </body>
 </html>
