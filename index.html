@@ -123,7 +123,7 @@
       if (!url) { showToast('未找到有效链接，请粘贴正确的分享链接'); return; }
       const platform = detectPlatform(url);
       if (!platform) { showToast('无法识别平台，支持抖音和小红书'); return; }
-      const apiMap = { douyin: '/api/douyin/douyin.php', xiaohongshu: '/api/xiaohongshu/xhsjx.php' };
+      const apiMap = { douyin: '/api/douyin', xiaohongshu: '/api/xhs' };
       setLoading(true);
       hideResult();
       fetch(BASE + apiMap[platform] + '?url=' + encodeURIComponent(url))
