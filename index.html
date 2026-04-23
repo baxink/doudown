@@ -116,6 +116,28 @@
       navigator.clipboard.writeText(text).then(() => showToast('已复制到剪贴板'));
     }
 
+    async function downloadFile(url, filename) {
+      try {
+        showToast('正在下载...');
+        const response = await fetch(url);
+        if (!response.ok) throw new Error('下载失败');
+        const blob = await response.blob();
+        const blobUrl = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = blobUrl;
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(blobUrl);
+        showToast('下载完成');
+      } catch (err) {
+        showToast('下载失败，已复制链接');
+        copyText(url);
+        window.open(url, '_blank');
+      }
+    }
+
     function parse() {
       const raw = document.getElementById('urlInput').value.trim();
       if (!raw) { showToast('请输入链接'); return; }
@@ -219,14 +241,15 @@
       dlSection.innerHTML = '';
       if (data.type === 'video' && data.url) {
         const title = (data.title || 'video').replace(/[^\w一-龥]/g, '_').slice(0, 30);
+        const safeTitle = title.replace(/'/g, "\\'");
         dlSection.innerHTML = `
           <div class="flex gap-2">
-            <a href="${data.url}" download="${encodeURIComponent(title + '.mp4')}" class="flex-1 text-center bg-indigo-500 hover:bg-indigo-600 text-white font-medium py-2.5 rounded-xl text-sm transition link-btn">下载视频</a>
+            <button onclick="downloadFile('${data.url}', '${safeTitle}.mp4')" class="flex-1 text-center bg-indigo-500 hover:bg-indigo-600 text-white font-medium py-2.5 rounded-xl text-sm transition link-btn">下载视频</button>
             <button onclick="copyText('${data.url}')" class="px-5 py-2.5 border border-gray-200 hover:bg-gray-50 rounded-xl text-sm transition">复制链接</button>
           </div>`;
         if (data.video_backup?.length) {
           dlSection.innerHTML += data.video_backup.map((u, i) =>
-            `<a href="${u}" download="${encodeURIComponent(title + '_' + (i+1) + '.mp4')}" class="block text-center text-xs text-gray-400 hover:text-indigo-500 mt-1">备用线路${i+1}下载</a>`
+            `<button onclick="downloadFile('${u}', '${safeTitle}_${i+1}.mp4')" class="block text-center text-xs text-gray-400 hover:text-indigo-500 mt-1">备用线路${i+1}下载</button>`
           ).join('');
         }
       }
