@@ -186,6 +186,7 @@
 
     function renderResult(data) {
       const apiPath = currentPlatform === 'xiaohongshu' ? '/api/xhs' : '/api/douyin';
+      const fileTitle = (data.title || data.desc || 'video').replace(/[^\w一-龥]/g, '_').replace(/_+/g, '_').replace(/^_|_$/g, '').slice(0, 30) || 'download';
       hideResult();
       const card = document.getElementById('resultCard');
       card.classList.remove('hidden');
@@ -221,7 +222,7 @@
           const div = document.createElement('div');
           div.className = 'relative group';
           div.innerHTML = `<img src="${BASE}${apiPath}?dl=${encodeURIComponent(img)}" onclick="window.open('${BASE}${apiPath}?dl=${encodeURIComponent(img)}', '_blank')">
-            <a href="${BASE}${apiPath}?dl=${encodeURIComponent(img)}&filename=image_${i+1}.jpg" class="absolute bottom-1 right-1 bg-black/60 text-white text-xs px-2 py-1 rounded transition">下载</a>`;
+            <a href="${BASE}${apiPath}?dl=${encodeURIComponent(img)}&filename=${encodeURIComponent(fileTitle + '_' + (i+1) + '.jpg')}" class="absolute bottom-1 right-1 bg-black/60 text-white text-xs px-2 py-1 rounded transition">下载</a>`;
           gallery.appendChild(div);
         });
       }
@@ -235,8 +236,8 @@
           div.className = 'rounded-xl overflow-hidden';
           div.innerHTML = `<img src="${BASE}${apiPath}?dl=${encodeURIComponent(lp.image)}" class="w-full h-48 object-cover">
             <div class="p-2 bg-gray-50 flex gap-2">
-              <a href="${BASE}${apiPath}?dl=${encodeURIComponent(lp.image)}&filename=live_${i+1}_photo.jpg" class="flex-1 text-center bg-white border text-xs py-1.5 rounded-lg">下载照片</a>
-              <a href="${BASE}${apiPath}?dl=${encodeURIComponent(lp.video)}&filename=live_${i+1}_video.mp4" class="flex-1 text-center bg-indigo-500 text-white text-xs py-1.5 rounded-lg">下载视频</a>
+              <a href="${BASE}${apiPath}?dl=${encodeURIComponent(lp.image)}&filename=${encodeURIComponent(fileTitle + '_' + (i+1) + '_photo.jpg')}" class="flex-1 text-center bg-white border text-xs py-1.5 rounded-lg">下载照片</a>
+              <a href="${BASE}${apiPath}?dl=${encodeURIComponent(lp.video)}&filename=${encodeURIComponent(fileTitle + '_' + (i+1) + '_video.mp4')}" class="flex-1 text-center bg-indigo-500 text-white text-xs py-1.5 rounded-lg">下载视频</a>
             </div>`;
           liveSection.appendChild(div);
         });
@@ -245,15 +246,14 @@
       const dlSection = document.getElementById('downloadSection');
       dlSection.innerHTML = '';
       if (data.type === 'video' && data.url) {
-        const title = (data.title || 'video').replace(/[^\w一-龥]/g, '_').slice(0, 30);
         dlSection.innerHTML = `
           <div class="flex gap-2">
-            <a href="${BASE}${apiPath}?dl=${encodeURIComponent(data.url)}&filename=${encodeURIComponent(title + '.mp4')}" class="flex-1 text-center bg-indigo-500 hover:bg-indigo-600 text-white font-medium py-2.5 rounded-xl text-sm transition link-btn">下载视频</a>
+            <a href="${BASE}${apiPath}?dl=${encodeURIComponent(data.url)}&filename=${encodeURIComponent(fileTitle + '.mp4')}" class="flex-1 text-center bg-indigo-500 hover:bg-indigo-600 text-white font-medium py-2.5 rounded-xl text-sm transition link-btn">下载视频</a>
             <button onclick="copyText('${data.url}')" class="px-5 py-2.5 border border-gray-200 hover:bg-gray-50 rounded-xl text-sm transition">复制链接</button>
           </div>`;
         if (data.video_backup?.length) {
           dlSection.innerHTML += data.video_backup.map((u, i) =>
-            `<a href="${BASE}${apiPath}?dl=${encodeURIComponent(u)}&filename=${encodeURIComponent(title + '_' + (i+1) + '.mp4')}" class="block text-center text-xs text-gray-400 hover:text-indigo-500 mt-1">备用线路${i+1}下载</a>`
+            `<a href="${BASE}${apiPath}?dl=${encodeURIComponent(u)}&filename=${encodeURIComponent(fileTitle + '_' + (i+1) + '.mp4')}" class="block text-center text-xs text-gray-400 hover:text-indigo-500 mt-1">备用线路${i+1}下载</a>`
           ).join('');
         }
       }
@@ -282,8 +282,8 @@
   </script>
   </div>
   <div class="text-center text-xs text-gray-400 py-4 space-y-1">
-    <div>v1.8 - 修复解析失败bug</div>
-    <div class="text-gray-300">更新：修复 const apiPath 声明前使用导致的 ReferenceError</div>
+    <div>v1.9 - 下载文件以内容标题命名</div>
+    <div class="text-gray-300">更新：视频、图片、实况照片下载文件名统一使用内容标题</div>
   </div>
 </body>
 </html>
