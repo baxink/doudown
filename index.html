@@ -185,6 +185,7 @@
     }
 
     function renderResult(data) {
+      const apiPath = currentPlatform === 'xiaohongshu' ? '/api/xhs' : '/api/douyin';
       hideResult();
       const card = document.getElementById('resultCard');
       card.classList.remove('hidden');
@@ -211,8 +212,6 @@
         document.getElementById('videoPlayer').src = data.url;
         videoWrapper.classList.remove('hidden');
       }
-
-      const apiPath = currentPlatform === 'xiaohongshu' ? '/api/xhs' : '/api/douyin';
 
       const gallery = document.getElementById('imageGallery');
       gallery.innerHTML = ''; gallery.classList.add('hidden');
