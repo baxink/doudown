@@ -93,7 +93,7 @@
   <div id="toast" class="toast"></div>
 
   <script>
-    const BASE = 'https://api.bugpk.com';
+    const BASE = 'https://doudown-proxy.fanxj137616.workers.dev';
 
     function extractUrl(text) {
       const match = text.match(/https?:\/\/(?:www\.|(?:v|d)\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:%_+.~#?&/=]*)/i);
@@ -287,8 +287,8 @@
   </script>
   </div>
   <div class="text-center text-xs text-gray-400 py-4 space-y-1">
-    <div>v2.3 - 修复API解析失败，切换后端为 api.bugpk.com</div>
-    <div class="text-gray-300">更新：Worker下线，直连PHP后端，支持中文文件名</div>
+    <div>v2.4 - 切换回 Cloudflare Worker</div>
+    <div class="text-gray-300">更新：Worker恢复，支持抖音/小红书解析</div>
   </div>
 </body>
 </html>
