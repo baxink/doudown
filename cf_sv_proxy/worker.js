@@ -407,10 +407,9 @@ async function getMediaType(url, type) {
 
 async function handleRequest(request) {
     const urlObj = new URL(request.url, `https://${request.headers.get('host')}`);
-    const proxyurl = urlObj.searchParams.get('proxyurl') || urlObj.searchParams.get('dl');
+    const proxyurl = urlObj.searchParams.get('proxyurl');
     const type = urlObj.searchParams.get('type') || 'douyin';
     const mediaType = urlObj.searchParams.get('mediatype');
-    const customFilename = urlObj.searchParams.get('filename');
 
     if (!proxyurl) {
         return new Response(JSON.stringify({code: 400, msg: 'proxyurl参数不能为空'}), {
@@ -478,17 +477,6 @@ async function handleRequest(request) {
         'Access-Control-Allow-Headers': 'Content-Type',
         ...result.headers
     };
-
-    // 自定义文件名
-    if (customFilename) {
-        const decodedFilename = decodeURIComponent(customFilename);
-        const ext = decodedFilename.includes('.') ? decodedFilename.split('.').pop() : '';
-        responseHeaders['Content-Disposition'] = `attachment; filename="${decodedFilename}"`;
-        if (ext) {
-            const mimeMap = { jpg: 'image/jpeg', jpeg: 'image/jpeg', png: 'image/png', webp: 'image/webp', mp4: 'video/mp4', mov: 'video/quicktime' };
-            if (mimeMap[ext]) responseHeaders['Content-Type'] = mimeMap[ext];
-        }
-    }
 
     return new Response(result.data, {
         status: result.status,
