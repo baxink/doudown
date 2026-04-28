@@ -1,0 +1,13 @@
+# 本地 PHP 开发服务器文件
+api/
+router.php
+douyin-signer.js
+start.command
+start.sh
+short_videos/
+img/
+
+# 文档
+LICENSE
+README.md
+README_EN.md
