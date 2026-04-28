@@ -7,6 +7,9 @@ start.sh
 short_videos/
 img/
 
+# 部署配置
+wrangler.toml
+
 # 文档
 LICENSE
 README.md

@@ -335,7 +335,15 @@ export default {
       });
     }
 
-    // 1. API 解析接口
+    // 1. 文件代理下载（?dl=）需优先于解析接口，因两者共用路径
+    const dlUrl = url.searchParams.get('dl');
+    if (dlUrl) {
+      const filename = url.searchParams.get('filename') || 'download';
+      const type = url.searchParams.get('type') || 'douyin';
+      return proxyFile(dlUrl, filename, type);
+    }
+
+    // 2. API 解析接口
     if (path === '/api/douyin') {
       const targetUrl = url.searchParams.get('url');
       if (!targetUrl) {
@@ -352,14 +360,6 @@ export default {
       }
       const result = await parseXiaohongshu(targetUrl);
       return jsonResponse(result);
-    }
-
-    // 2. 文件代理下载接口
-    const dlUrl = url.searchParams.get('dl');
-    if (dlUrl) {
-      const filename = url.searchParams.get('filename') || 'download';
-      const type = url.searchParams.get('type') || 'douyin';
-      return proxyFile(dlUrl, filename, type);
     }
 
     // 3. 默认响应
