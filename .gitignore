@@ -8,7 +8,6 @@ short_videos/
 img/
 
 # 部署配置
-wrangler.toml
 .env.deploy
 node_modules/
 .wrangler/
