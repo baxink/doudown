@@ -9,6 +9,10 @@ img/
 
 # 部署配置
 wrangler.toml
+.env.deploy
+node_modules/
+.wrangler/
+package-lock.json
 
 # 文档
 LICENSE

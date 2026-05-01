@@ -93,7 +93,8 @@
   <div id="toast" class="toast"></div>
 
   <script>
-    const BASE = /localhost|127\.0\.0\.1/.test(location.hostname) ? '' : 'https://doudown-proxy.fanxj137616.workers.dev';
+    const isLocal = !location.hostname || location.protocol === 'file:' || /localhost|127\.0\.0\.1|::1|^0\.0\.0\.0$/.test(location.hostname) || /^192\.168\.|^10\.|^172\.(1[6-9]|2\d|3[01])\./.test(location.hostname);
+    const BASE = isLocal ? '' : 'https://doudown-proxy.fanxj137616.workers.dev';
 
     function extractUrl(text) {
       const match = text.match(/https?:\/\/(?:www\.|(?:v|d)\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:%_+.~#?&/=]*)/i);
